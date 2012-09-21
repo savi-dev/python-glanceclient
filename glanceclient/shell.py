@@ -202,9 +202,18 @@ class OpenStackImagesShell(object):
                                     auth_url=kwargs.get('auth_url'))
         service_type = kwargs.get('service_type') or 'image'
         endpoint_type = kwargs.get('endpoint_type') or 'publicURL'
-        endpoint = _ksclient.service_catalog.url_for(
+        region = kwargs.get('region')
+	if region is not None:
+        	endpoint = _ksclient.service_catalog.url_for(
+                             attr='region',
+                             filter_value=region, 
                              service_type=service_type,
                              endpoint_type=endpoint_type)
+	else:
+        	endpoint = _ksclient.service_catalog.url_for(
+                             service_type=service_type,
+                             endpoint_type=endpoint_type)
+	
         endpoint = self._strip_version(endpoint)
         return (endpoint, _ksclient.auth_token)
 
@@ -261,6 +270,7 @@ class OpenStackImagesShell(object):
             kwargs = {
                 'username': args.os_username,
                 'password': args.os_password,
+                'region': args.os_region_name,
                 'tenant_id': args.os_tenant_id,
                 'tenant_name': args.os_tenant_name,
                 'auth_url': args.os_auth_url,
