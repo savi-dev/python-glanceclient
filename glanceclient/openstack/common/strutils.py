@@ -151,6 +151,8 @@ def safe_encode(text, incoming=None,
                 representation of it.
     :raises TypeError: If text is not an instance of str
     """
+    if text is None:
+        return 'None'
     if not isinstance(text, (six.string_types, six.binary_type)):
         raise TypeError("%s can't be encoded" % type(text))
 
